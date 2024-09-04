@@ -4,33 +4,24 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 public class Topic_00_Template {
     WebDriver driver;
-    String projectPath = System.getProperty("user.dir");
-    String osName = System.getProperty("os.name");
+    WebDriverWait expliciWait;
 
     @BeforeClass
     public void beforeClass() {
-        if (osName.contains("Windows")) {
-            System.setProperty("webdriver.gecko.driver", projectPath + "\\browserDrivers\\geckodriver.exe");
-        } else {
-            System.setProperty("webdriver.gecko.driver", projectPath + "/browserDrivers/geckodriver");
-        }
-
-        FirefoxOptions options = new FirefoxOptions();
-        options.setBinary("C:\\Users\\admin\\AppData\\Local\\Mozilla Firefox\\firefox.exe"); //location where Firefox is installed
-        System.out.println(options.getBinary().getPath());
-        driver = new FirefoxDriver(options);
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-        driver.manage().window().maximize();
-        driver.get("https://www.facebook.com/");
+        driver = new FirefoxDriver();
+        expliciWait = new WebDriverWait(driver, Duration.ofSeconds(30));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
     }
 
     @Test
@@ -44,8 +35,13 @@ public class Topic_00_Template {
     }
 
     @AfterClass
-    public void afterClass() throws InterruptedException {
-        Thread.sleep(2000);
-        driver.quit();
+    public void afterClass() { driver.quit(); }
+    public void sleepInSeconds(long timeInSecond) {
+        try {
+            Thread.sleep(timeInSecond * 1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }
